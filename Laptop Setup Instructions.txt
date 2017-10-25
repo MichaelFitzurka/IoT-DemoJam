@@ -1,0 +1,24 @@
+Software needed on laptop (assuming Fedora 26) 
+
+TigerVNC Viewer (for Pi)
+	Terminal
+		sudo dnf install tigervnc
+
+Arduino IDE (for Sensor(s))
+	Terminal
+		sudo dnf install arduino
+
+Some good URLs:
+	Source code/setup:
+		http://www.opensourcerers.org/author/psteiner/
+		https://github.com/PatrickSteiner/IoT_Demo_AllInOne
+
+	Sensor chip details:
+		https://www.wemos.cc/product/d1-mini.html
+
+	Sensor wiring with AM2302:
+		https://www.hackster.io/vsaravind007/esp8266-simple-weather-station-f0824b
+
+	CLI Manual Docker cleanup:
+		https://www.digitalocean.com/community/tutorials/how-to-remove-docker-images-containers-and-volumes
+

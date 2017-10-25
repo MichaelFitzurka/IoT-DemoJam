@@ -1,0 +1,242 @@
+Materials:
+	UPS Power supply
+	D-Link router
+	Powerstrip
+	Laptop for Datacenter + Network cable + Mouse
+	Laptop for Controls
+	Leap Motion Sensor
+	Drone-in-a-box
+	Phone for Alexa/Internet + USB cord
+	Wired speaker for Datacenter Laptop
+	Raspberry Pi Smart Gateway
+	USB Thumb drive for Raspberry Pi swap
+	Battery for Raspberry Pi
+	3 Sensors + 2 USB connectors
+	2 AA Batteries
+	USB Hub
+	Hairdryer
+	Bluetooth speaker for Alexa Phone
+	Phone for Stopwatch
+	FitBit (for show only)
+	Fishing net
+	MIFI for internet, possibly.
+
+Preparation scripts:
+
+1) Night Before
+	a) Make sure UPS is charged.
+	b) Make sure laptops are charged. (*Rick)
+	c) Make sure drone battery is charged.
+	d) Make sure phones are charged. (*Rick)
+	e) Make sure speakers are charged.
+	f) Make sure Raspberry Pi battery is charged.
+
+2a) Prepare Router
+	a) Turn on UPS.
+	b) Make sure Router is on and plugged into powerstrip.
+
+2b) Prepare Datacenter CDK
+	a) Turn on Datacenter laptop and shut down all non-essential programs.
+	b) Make sure Datacenter is landline connected to router as: 192.168.106.201.  (If not, resolve at http://192.168.106.1/)
+	c) Make sure Datacenter is wifi connected to Hotel Wifi/MIFI (Test internet).
+	d) In the first Terminal window, start CDK with:
+		. start-iotd-docp.sh
+	e) When the console appears, login (as MichaelFitzurka), and navigate to the project.
+	f) Start up the pods, one at a time, in the following order:
+		i) iotd-docp-broker-amq
+		ii) iotd-docp-fis
+		iii) iotd-docp-dg
+		iv) iotd-docp-bds
+	g) Open up additional browser tabs for:
+		i) FIS Pod: Java Console
+	h) Open a second terminal window and start proxy with:
+		. start-iotd-proxy.sh
+	i) Start node no-drone and sent data to test "D" should get 4 pods:
+		. start-iotd-no-drone.sh
+
+2c) Prepare Datacenter BPMS
+	a) When all pods are up in Datacenter, in a third Terminal window, start BPMS with:
+		. start-iotd-bpms.sh
+	b) Prepare BPMS by:
+		i) Open a browser window to:
+			http://iotd-laptop:8080/business-central/kie-wb.jsp
+		ii) Login (as psteiner) and select "Authoring / Project Authoring" from the menu.
+		iii) Press the "Open Project Editor" button.
+		iv) Press the "Build / Build & Deploy" button.
+		v) Press the "Override" button on the "Conflicting Repositories" popup menu.
+		vi) Should get "Build Successful" message.
+	c) Create BPMS staged event:
+		i) New Task - Basic - Task Name: Handle Event
+		ii) Form - Task form DeploymentId: RedHat:IoTProcesses:1.0
+		iii) Form - Task form name: handleEvent-taskform.form
+		iv) Press Create
+		v) Device Type: Temperature
+		vi) Device ID: 1657032
+		vii) Time Message received: 18.10.2017 18:42:25 280
+		viii) Error Code: 2
+		ix) Error Message: Temperature high
+		x) Data received: 31
+		xi) Save on Work tab
+		xii) Details - Priority: 10 - Low
+		xiii) Update on Details tab
+	d) Create Tab:
+		i) Name: IoT Demo
+		ii) Description: IoT Demo
+		iii) Filter - Priority != 10
+
+2d) Prepare Datacenter Laptop
+	a) Make sure Leap Motion sensor is connected and lights are on.
+		Can restart with: systemctl restart leap
+		Can test with: Playground
+	b) Open a fourth terminal window, with the following command ready to go.
+		systemctl restart leap
+
+	c) Make sure Slack is started with no existing Slack temperature alerts exist:
+		To list channel messages:
+			https://slack.com/api/groups.history?token=xoxp-***Your-token-here***&channel=***Your-channel-here***
+		To delete bot messages - just add ts at end:
+			https://slack.com/api/chat.delete?token=xoxp-***Your-token-here***&channel=***Your-channel-here***&as_user=true&ts=
+
+	d) Turn on Alexa phone's "Personal hotspot".
+	e) Turn off phone passcode: Settings - Touch ID & Passcode - Turn Passcode Off
+	f) Connect phone to Bluetooth speaker
+	g) Open phone to Reverb app for Alexa and prime the app with "Alexa, ask the gateway for a sound check."
+	h) Turn phone/speaker volume up to max
+	i) Make sure Datacenter is USB connected to phone.
+
+	j) Make sure Datacenter is connected to speakers by the headphone jack.
+	k) Test laptop speaker volume.
+
+	l) Open up presentation.
+
+2e) Prepare Drone
+	a) Make sure Drone lens cap is off, battery plugged in, but off, and drone is positioned in box.
+	b) In a fifth Terminal window, open code for drone
+		vi ~/Projects/IoT_Demo/IoT-Demo_Drone/iotd-drone.js
+	   and ensure lines 8-10 read:
+		DEBUG_MODE = false;
+		FLIGHT_MODE = true;
+		PUBLISH_MODE = true;
+	c) Leave terminal window open for later.
+
+2f) Prepare Smart Gateway (with Datacenter laptop)
+	a) Plug in USB Thumbdrive into Raspberry Pi before powering up.
+	b) Plug in Raspberry Pi Smart Gateway into backup battery.
+	c) When the yellow drive light is off, on Presentation laptop, open a VNCViewer to:
+		iotd-smartgateway:1
+	d) In VNCViewer:
+		i) Open first Terminal for: top
+		ii) Open second Terminal and run:
+			cd IoT_Demo_SmartGateway/
+			docker-compose up -d
+			docker logs -f
+		iii) Wait until both brokers have connected and keep waiting until the top wait is clear
+	e) Open another tab on Datacenter browser to:
+		http://iotd-smartgateway:8181/hawtio/welcome
+	f) Wait until page appears and top is clear again.
+	g) Close the Terminal with top.
+
+2g) Prepare Misc
+	a) Give batteries to Rick.
+	b) Connect Hub sensors to the USB hub, but the hub should not be powered.
+	c) Hairdryer should be off and on low.
+	d) Make sure Stopwatch Phone app is up
+	e) Make sure Mike is wearing FitBit
+	f) Make sure we have safety net
+
+2h) On Control Laptop
+	a) Should be connected to IoT-Wifi Router
+	a) In a terminal window, start controller with:
+		node iotd-control.js
+	   Leave on this window throughout demo.
+
+*** 3) Carry to Stage (NOTE: Ask Red Hat if we can have people help move equipment to stage)
+	a) (UPS + Router) + (Datacenter laptops + Leap motion sensor + Speaker) (PersonA + Mike)
+	b) Fitbit + Phone + Bluetooth speaker (Mike)
+	c) Phone for stopwatch (Rick)
+	d) Sensor + batteries (Rick)
+	e) Smart Gateway + Backup Battery (Do not disconnect or all is lost!) (PersonB)
+	f) Drone hidden in box (PersonC)
+	g) Sensors + USB hub (PersonD) -- Do not plug in power.
+	h) Hairdryer (PersonD)
+	i) Fishing net (PersonD)
+
+4) On Stage (4 min)
+R	a) Plug in Datacenter laptops into UPS/power (to run faster).
+R	b) Plug in hairdryer (still off - Rick accessible).
+M	c) Check flight-path for drone and turn it on.
+M	d) Change Wifi to Bebop2...
+M	e) In 4th terminal, Start drone controller with: 
+		. start-iotd-drone.sh
+	   Press 'V' to start video.
+	   Press 'space' to halt hand commands from start.
+M	f) Open a new browser tab to pre-load/test -- close tab afterwards:
+		http://iotd-laptop:9080/iotd-dronecam/
+	   (Press 'F11' to go full screen, if needed)
+M(R?)	g) Check connections on all wires on all sensors.
+R	h) On battery sensor, make sure red wire is not connected and plug in batteries to sensor.
+M	i) Check hub sensors are Mike accessible, and not powered.
+MR	j) Mic check for Mike/Rick/laptop/Alexa.
+M	k) Plug in Presenter laptop to projector
+M	l) Make sure the following apps should be in the Presentation window:
+		i) LibreOffice Impress
+		ii) Firefox
+		iii) TigerVNC
+		iv) Slack
+M	m) Make sure presentation is showing and browser is on CDK tab.
+
+5) Presentation (8 min)
+	a) Mike: Start local stopwatch app.
+		Rick: Introduction - Slide 1
+
+(2:15)	b) Mike: Speed read through slides 2 - 14
+	c) Mike: Switch to Firefox:
+		i) Show pods running
+		ii) Show FIS Java Console - Camel routes
+		iii) Show gateway hawtio
+	   Show Smart Gateway logs on TigerVNC
+
+	d) Mike & Rick: Start the sensors (Rick: move red wire - Mike: Plug in USB hub)
+
+	e) Mike: Show data coming in to Pi, then show Hawtio, then show Java Console with fewer hits.  Go back to gateway logs.
+	f) Rick: So lets heat up the sensor - "don't try this at home, we're professionals" - count up the temp from the logs
+
+	g) Light goes off & Slack message arrives.
+	h) Mike: Open Slack message, click computer icon which opens BPMS.
+	i) Mike: Go to BPMS Tasks: Point out details and start event, I "decide" to send in drone.
+
+	j) Mike: Ask Alexa: "Alexa, ask the gateway to conduct pre-flight checks on the drone"
+		Alexa says: Well? The drone is operational, but "oh boy" Your Fitbit tells me that your heart rate has increased dramatically.  Are you sure you're okay to fly?"
+		Rick: wait until Alexa is done and then get safety net.
+		Mike: Take off and throw FitBit and say "It's just demo nerves Alexa, I'm sure I'll be fine." ... and press "Deploy Drone" button.
+		Rick: "Wouldn't it have been cheaper to just use a webcam?"
+		Mike: "Cheaper?  Yes.  Cooler?  No. --- Let's look at the sensor."
+		Mike: Press Yellow button to popup sensor page, "Temps ok now, but light is on ... let me reach into 'internet' and fly this thing".
+		Rick: Explain that this was accomplished with a conglomeration of many open source, node-js packages, while I launch the drone.
+		(Rick gets into frame if needed).
+
+		Use fist gesture to "stop"
+		use clockwise gesture for "takeOff"
+		Leave the drone hovering. 
+
+(0:40)	k) Mike: Press '1' - Drone says: "Intruder detected! He appears to be armed, with ... a fishing net?! Shall I nuke the site from orbit?"
+		Mike: "No, no, no, no .... Drone, it's a just demo! ... Alexa tell the drone its just a demo!"
+		Press '2' - Drone says" "But?  It's the only way to be sure."
+		Mike: "Oh no!  Did you just roll your eye at me drone?"
+		Rick: "Did that drone just quote Aliens? ... Why did you even add this capability?!?!?!"
+		Mike: "To scare off intruders -- So Drone! ... scare off the intruder"
+		Rick: quickly add, " ... but don't go nuclear"
+		Press '3' - Drone says "Okay.  Hey!  Intruder!  Stop blowing that sensor!" --- This also gets data and sends to Alexa
+		Mike: "Drone ... I don't think that means what you think that means ... You know what, it doesn't matter ... With the threat of nuclear annihilation, the bad guy leaves the sensor alone, and I can resolve the issue ... and the light should go out."
+
+	l) On BPMS, press "Complete", light goes out, much rejoicing.
+
+	Given time: (0:30~0:50 depending on Alexa)
+
+	m) Mike & Rick: "Bonus demo!"
+	n) Mike: Ask Alexa: "Alexa, ask the gateway for a status report"
+(~0:15)	o) Rick: Explain that Alexa is going to report on live data from CDK on the datacenter, Docker on the smart gateway, BPMS and directly from the sensors themselves.
+(0:22)  p) Alexa says: Status Report. The datacenter is running 5 pods.  The gateway is running 2 containers.  3 sensors are active.  You have 0 human tasks to complete.  Way to go.  The maximum sensor temperature was 32 degrees Celcius.  Drone was deployed.  DemoJam was conquered.  And there was much rejoicing.  Yay!"
+
+	q) Mike & Rick: "Thank you! Good night!"
+
