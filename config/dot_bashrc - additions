@@ -1,0 +1,3 @@
+export MINISHIFT_USERNAME=***Your Red Hat Username***
+export MINISHIFT_PASSWORD=***Your Red Hat Password***
+export PATH=$PATH:~/Projects/IoT_DemoJam

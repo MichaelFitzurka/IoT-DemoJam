@@ -3,8 +3,7 @@ Materials:
 	D-Link router
 	Powerstrip
 	Laptop for Datacenter + Network cable + Mouse
-	Laptop for Controls
-	Leap Motion Sensor
+	Leap Motion Controller
 	Drone-in-a-box
 	Phone for Alexa/Internet + USB cord
 	Wired speaker for Datacenter Laptop
@@ -25,7 +24,7 @@ Preparation scripts:
 
 1) Night Before
 	a) Make sure UPS is charged.
-	b) Make sure laptops are charged. (*Rick)
+	b) Make sure laptop is charged.
 	c) Make sure drone battery is charged.
 	d) Make sure phones are charged. (*Rick)
 	e) Make sure speakers are charged.
@@ -33,33 +32,33 @@ Preparation scripts:
 
 2a) Prepare Router
 	a) Turn on UPS.
-	b) Make sure Router is on and plugged into powerstrip.
+	b) Make sure Router is on and plugged into UPS.
 
 2b) Prepare Datacenter CDK
 	a) Turn on Datacenter laptop and shut down all non-essential programs.
 	b) Make sure Datacenter is landline connected to router as: 192.168.106.201.  (If not, resolve at http://192.168.106.1/)
 	c) Make sure Datacenter is wifi connected to Hotel Wifi/MIFI (Test internet).
 	d) In the first Terminal window, start CDK with:
-		. start-iotd-docp.sh
+		. start-iotdj-docp.sh
 	e) When the console appears, login (as MichaelFitzurka), and navigate to the project.
 	f) Start up the pods, one at a time, in the following order:
-		i) iotd-docp-broker-amq
-		ii) iotd-docp-fis
-		iii) iotd-docp-dg
-		iv) iotd-docp-bds
+		i) iotdj-docp-broker-amq
+		ii) iotdj-docp-fis
+		iii) iotdj-docp-dg
+		iv) iotdj-docp-bds
 	g) Open up additional browser tabs for:
 		i) FIS Pod: Java Console
 	h) Open a second terminal window and start proxy with:
-		. start-iotd-proxy.sh
-	i) Start node no-drone and sent data to test "D" should get 4 pods:
-		. start-iotd-no-drone.sh
+		. start-iotdj-proxy.sh
+	i) Start node no-drone and sent data to test "D" should get 4 pods, if not, bounce CDK:
+		. start-iotdj-no-drone.sh
 
 2c) Prepare Datacenter BPMS
 	a) When all pods are up in Datacenter, in a third Terminal window, start BPMS with:
-		. start-iotd-bpms.sh
+		. start-iotdj-bpms.sh
 	b) Prepare BPMS by:
 		i) Open a browser window to:
-			http://iotd-laptop:8080/business-central/kie-wb.jsp
+			http://iotdj-laptop:8080/business-central/kie-wb.jsp
 		ii) Login (as psteiner) and select "Authoring / Project Authoring" from the menu.
 		iii) Press the "Open Project Editor" button.
 		iv) Press the "Build / Build & Deploy" button.
@@ -79,13 +78,13 @@ Preparation scripts:
 		xi) Save on Work tab
 		xii) Details - Priority: 10 - Low
 		xiii) Update on Details tab
-	d) Create Tab:
-		i) Name: IoT Demo
-		ii) Description: IoT Demo
+	d) Create Tab (if not there):
+		i) Name: IoT DemoJam
+		ii) Description: IoT DemoJam
 		iii) Filter - Priority != 10
 
 2d) Prepare Datacenter Laptop
-	a) Make sure Leap Motion sensor is connected and lights are on.
+	a) Make sure Leap Motion Controller is connected and lights are on.
 		Can restart with: systemctl restart leap
 		Can test with: Playground
 	b) Open a fourth terminal window, with the following command ready to go.
@@ -95,7 +94,7 @@ Preparation scripts:
 		To list channel messages:
 			https://slack.com/api/groups.history?token=xoxp-***Your-token-here***&channel=***Your-channel-here***
 		To delete bot messages - just add ts at end:
-			https://slack.com/api/chat.delete?token=xoxp-***Your-token-here***&channel=***Your-channel-here***&as_user=true&ts=
+			https://slack.com/api/chat.delete?token=xoxb-***Your-token-here***&channel=***Your-channel-here***&as_user=true&ts=
 
 	d) Turn on Alexa phone's "Personal hotspot".
 	e) Turn off phone passcode: Settings - Touch ID & Passcode - Turn Passcode Off
@@ -112,7 +111,7 @@ Preparation scripts:
 2e) Prepare Drone
 	a) Make sure Drone lens cap is off, battery plugged in, but off, and drone is positioned in box.
 	b) In a fifth Terminal window, open code for drone
-		vi ~/Projects/IoT_Demo/IoT-Demo_Drone/iotd-drone.js
+		vi ~/Projects/IoT_DemoJam/IoT-DemoJam_Drone/iotdj-drone.js
 	   and ensure lines 8-10 read:
 		DEBUG_MODE = false;
 		FLIGHT_MODE = true;
@@ -123,16 +122,16 @@ Preparation scripts:
 	a) Plug in USB Thumbdrive into Raspberry Pi before powering up.
 	b) Plug in Raspberry Pi Smart Gateway into backup battery.
 	c) When the yellow drive light is off, on Presentation laptop, open a VNCViewer to:
-		iotd-smartgateway:1
+		iotdj-smartgateway:1
 	d) In VNCViewer:
 		i) Open first Terminal for: top
 		ii) Open second Terminal and run:
-			cd IoT_Demo_SmartGateway/
+			cd IoT_DemoJam_SmartGateway/
 			docker-compose up -d
 			docker logs -f
 		iii) Wait until both brokers have connected and keep waiting until the top wait is clear
 	e) Open another tab on Datacenter browser to:
-		http://iotd-smartgateway:8181/hawtio/welcome
+		http://iotdj-smartgateway:8181/hawtio/welcome
 	f) Wait until page appears and top is clear again.
 	g) Close the Terminal with top.
 
@@ -144,13 +143,7 @@ Preparation scripts:
 	e) Make sure Mike is wearing FitBit
 	f) Make sure we have safety net
 
-2h) On Control Laptop
-	a) Should be connected to IoT-Wifi Router
-	a) In a terminal window, start controller with:
-		node iotd-control.js
-	   Leave on this window throughout demo.
-
-*** 3) Carry to Stage (NOTE: Ask Red Hat if we can have people help move equipment to stage)
+3) Carry to Stage
 	a) (UPS + Router) + (Datacenter laptops + Leap motion sensor + Speaker) (PersonA + Mike)
 	b) Fitbit + Phone + Bluetooth speaker (Mike)
 	c) Phone for stopwatch (Rick)
@@ -161,29 +154,29 @@ Preparation scripts:
 	h) Hairdryer (PersonD)
 	i) Fishing net (PersonD)
 
-4) On Stage (4 min)
+4) On Stage (4 min prep time)
 R	a) Plug in Datacenter laptops into UPS/power (to run faster).
 R	b) Plug in hairdryer (still off - Rick accessible).
 M	c) Check flight-path for drone and turn it on.
 M	d) Change Wifi to Bebop2...
 M	e) In 4th terminal, Start drone controller with: 
-		. start-iotd-drone.sh
+		. start-iotdj-drone.sh
 	   Press 'V' to start video.
 	   Press 'space' to halt hand commands from start.
 M	f) Open a new browser tab to pre-load/test -- close tab afterwards:
-		http://iotd-laptop:9080/iotd-dronecam/
+		http://iotdj-laptop:9080/iotdj-dronecam/
 	   (Press 'F11' to go full screen, if needed)
 M(R?)	g) Check connections on all wires on all sensors.
 R	h) On battery sensor, make sure red wire is not connected and plug in batteries to sensor.
 M	i) Check hub sensors are Mike accessible, and not powered.
 MR	j) Mic check for Mike/Rick/laptop/Alexa.
 M	k) Plug in Presenter laptop to projector
-M	l) Make sure the following apps should be in the Presentation window:
+M	l) Make sure the following apps should be in the big screen:
 		i) LibreOffice Impress
 		ii) Firefox
 		iii) TigerVNC
 		iv) Slack
-M	m) Make sure presentation is showing and browser is on CDK tab.
+M	m) Make sure presentation is showing and browser is on the first CDK tab.
 
 5) Presentation (8 min)
 	a) Mike: Start local stopwatch app.
@@ -236,7 +229,7 @@ M	m) Make sure presentation is showing and browser is on CDK tab.
 	m) Mike & Rick: "Bonus demo!"
 	n) Mike: Ask Alexa: "Alexa, ask the gateway for a status report"
 (~0:15)	o) Rick: Explain that Alexa is going to report on live data from CDK on the datacenter, Docker on the smart gateway, BPMS and directly from the sensors themselves.
-(0:22)  p) Alexa says: Status Report. The datacenter is running 5 pods.  The gateway is running 2 containers.  3 sensors are active.  You have 0 human tasks to complete.  Way to go.  The maximum sensor temperature was 32 degrees Celcius.  Drone was deployed.  DemoJam was conquered.  And there was much rejoicing.  Yay!"
+(0:22)  p) Alexa says: Status Report. The datacenter is running 4 pods.  The gateway is running 2 containers.  3 sensors are active.  You have 0 human tasks to complete.  Way to go.  The maximum sensor temperature was 32 degrees Celcius.  Drone was deployed.  DemoJam was conquered.  And there was much rejoicing.  Yay!"
 
 	q) Mike & Rick: "Thank you! Good night!"
 
