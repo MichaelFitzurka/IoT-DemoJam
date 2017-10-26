@@ -94,7 +94,7 @@ oc serviceaccounts get-token robot
 
 ## Let's Configure Our New Nexus Pod
 Your Nexus Repository Manager pod should be ready.
-1) Going back to the OpenShift console, click on the Nexus route, which should be: http://nexus-iotd-docp.192.168.107.2.nip.io
+1) Going back to the OpenShift console, click on the Nexus route, which should be: http://nexus-iotdj-docp.192.168.107.2.nip.io
 2) Sign in with the default account setup:
 > **Username:** admin  
 > **Password:** admin123  
