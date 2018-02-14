@@ -33,7 +33,9 @@ As many of these changes/enhancements are for theatrics and impractical hardware
 This repository will contain the cross-cutting elements and instructions on how to build the entire chain.
 
 ## Demo Video
-[Follow the links here.](http://www.dlt.com/blog/2018/01/11/internet-demo-jam-setting-stage/)
+Follow the links [here](http://www.dlt.com/blog/2018/01/11/internet-demo-jam-setting-stage/).  
+Blog #1: [Setting the Stage](http://www.dlt.com/blog/2018/01/11/internet-demo-jam-setting-stage/).  
+Blog #2: [Architecting the Scene](http://www.dlt.com/blog/2018/02/13/internet-demo-jam-architecting-scene/).  
 
 ## Challenges
 As demos go, the difficulty on this one is "very high", as there are lots of "moving" parts where things can go wrong, and a lot of bleeding-edge, experimental and temperamental technologies.  But when pulled off, it is an impressive and entertaining chain of events!
