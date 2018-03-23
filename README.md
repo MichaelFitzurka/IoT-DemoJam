@@ -36,6 +36,8 @@ This repository will contain the cross-cutting elements and instructions on how 
 Follow the links [here](http://www.dlt.com/blog/2018/01/11/internet-demo-jam-setting-stage/).  
 Blog #1: [Setting the Stage](http://www.dlt.com/blog/2018/01/11/internet-demo-jam-setting-stage/).  
 Blog #2: [Architecting the Scene](http://www.dlt.com/blog/2018/02/13/internet-demo-jam-architecting-scene/).  
+Blog #3: [The Brains Behind the Demo](http://www.dlt.com/blog/2018/03/23/internet-demo-jam-brains-demo/).  
+GovLoop Academy: [10 Minute Online Course](https://go.govloop.com/implement-IoT.html?utm_source=sponsor&utm_medium=email&utm_campaign=red%20hat%20GLA)
 
 ## Challenges
 As demos go, the difficulty on this one is "very high", as there are lots of "moving" parts where things can go wrong, and a lot of bleeding-edge, experimental and temperamental technologies.  But when pulled off, it is an impressive and entertaining chain of events!
